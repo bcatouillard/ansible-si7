@@ -140,4 +140,38 @@
         apt:
           name: phpmyadmin
           state: present
-         
+          
+#Gestion des erreurs
+- name: "Gestion des erreurs"
+  hosts: all
+  tasks:   
+      - name: "Suppression index.html"
+        file: 
+            path: /var/www/html/index.html
+            state: absent 
+            
+      - name: "Copie index.php"
+        copy:
+          src: /root/index.php
+          dest: /var/www/html/
+          owner: www-data
+          group: www-data
+          mode: 0755
+          
+      - name: "Activation de l'affichage des erreurs display_errors"
+        lineinfile:
+            dest: /etc/php/7.2/apache2/php.ini
+            regexp: '^display_errors = Off'
+            line: 'display_errors = On'
+            
+      - name: "Activation de l'affichage des erreurs display_startup_errors"
+        lineinfile:
+            dest: /etc/php/7.2/apache2/php.ini
+            regexp: '^display_startup_errors = On'
+            line: 'display_startup_errors = Off'
+            
+      - name: "Redémarrer le service apache2"
+        service:
+           name: apache2
+           state: restarted
+           enabled: yes
