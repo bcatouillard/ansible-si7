@@ -7,7 +7,7 @@
     </head>
     <body>
         <?php
-        // put your code here
+            echo 'Grosse erreur
         ?>
     </body>
 </html>
